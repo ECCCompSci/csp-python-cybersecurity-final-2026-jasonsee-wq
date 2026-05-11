@@ -2,7 +2,7 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║        CSP Python & Cybersecurity Final Exam - 2026          ║
 ║                                                              ║
-║  Name:  _______________________________________________      ║
+║  Name:  Coy_See________________________________________      ║
 ║  Date:  _______________________________________________      ║
 ╚══════════════════════════════════════════════════════════════╝
 
@@ -75,7 +75,10 @@ print("\n--- Section 1: Python Basics ---")
 # Then print: "Hi, I'm [name], a grade [grade] student who loves [topic]!"
 
 # YOUR CODE HERE
-
+student_name = "Coy"
+student_grade = 10
+favorite_topic = "Python"
+print("Hi, I'm Coy, a grade 10 student who loves Python!")
 
 # ── 1B. Grade Calculator [16 pts] ────────────────────────
 # Write a function called letter_grade(score) that takes a
@@ -84,6 +87,21 @@ print("\n--- Section 1: Python Basics ---")
 
 def letter_grade(score):
     # YOUR CODE HERE
+    if score >= 90:
+      return "A"
+      
+    elif score >= 80:
+      return "B"
+      
+    elif score >= 70:
+      return "C"
+      
+    elif score >= 60:
+      return "D"
+       
+    else:
+      return "F"
+          
     pass
 
 # Test your function (do not change these lines)
@@ -98,13 +116,14 @@ threats = ["phishing", "malware", "ransomware", "spyware", "DDoS"]
 
 # 1. Add "brute force" to the end of the list
 # YOUR CODE HERE
-
+threats.append("brute force")
 # 2. Print the total number of threats
 # YOUR CODE HERE
-
+print(f"--- There are {len(threats)} lines in this file. ---")
 # 3. Print each threat in ALL CAPS using a loop
 # YOUR CODE HERE
-
+for threat in threats:
+   print(threat.upper())
 
 # ════════════════════════════════════════════════════════════
 # SECTION 2 — File I/O                              [40 pts]
@@ -122,6 +141,15 @@ print("\n--- Section 2: File I/O ---")
 #   VPN: A tool that encrypts your internet connection.
 
 # YOUR CODE HERE
+terms = ["Malware: Software designed to harm a computer or steal data.\n", 
+         "Phishing: A fake message that tricks you into revealing information.\n", 
+         "Encryption: Scrambling data so only authorized people can read it.\n", 
+         "Firewall: A system that monitors and controls network traffic.\n", 
+         "VPN: A tool that encrypts your internet connection.\n"
+         ]
+
+with open("cyber_glossary.txt", "w") as f:
+    f.writelines(terms)
 
 
 # ── 2B. Read and Search the File [20 pts] ────────────────
@@ -130,8 +158,11 @@ print("\n--- Section 2: File I/O ---")
 #   2. Search for the term "Encryption" and print that line
 
 # YOUR CODE HERE
+print("\n--- Contents of cyber_glossary.txt ---")
+with open("cyber_glossary.txt", "r") as f:
+    print(f.read())
 
-
+print(f"--- There are {len(terms)} lines in the file. ---")
 # ════════════════════════════════════════════════════════════
 # SECTION 3 — Caesar Cipher                         [40 pts]
 # ════════════════════════════════════════════════════════════
@@ -146,9 +177,18 @@ print("\n--- Section 3: Caesar Cipher ---")
 #
 # Example: encrypt_message("Hello!", 4) -> "Lipps!"
 
-def encrypt_message(text, shift):
+
     # YOUR CODE HERE
-    pass
+def encrypt_message(text, shift):
+    result = ""
+    for char in text:
+        if char.isalpha():
+            base = ord('A') if char.isupper() else ord('a')
+            result += chr((ord(char) - base + shift) % 26 + base)
+        else:
+            result += char
+    return result
+pass
 
 
 # ── 3B. Decrypt [20 pts] ─────────────────────────────────
@@ -157,9 +197,20 @@ def encrypt_message(text, shift):
 #
 # Example: decrypt_message("Lipps!", 4) -> "Hello!"
 
-def decrypt_message(text, shift):
+
     # YOUR CODE HERE
-    pass
+def decrypt_message(text, shift):
+    return encrypt_message(text, -shift)
+
+print("\n=== Caesar Cipher ===")
+message = "Hello, World!"
+shift   = 3
+encrypted = encrypt_message(message, shift)
+decrypted = decrypt_message(encrypted, shift)
+print(f"  Original:  {message}")
+print(f"  Encrypted: {encrypted}")
+print(f"  Decrypted: {decrypted}")
+pass
 
 
 # Test your cipher (do not change these lines)
@@ -198,7 +249,25 @@ print("\n--- Section 4: Password Strength Checker ---")
 
 def is_strong_password(password):
     # YOUR CODE HERE
-    pass
+    has_upper   = any(c.isupper() for c in password)
+    has_digit   = any(c.isdigit() for c in password)
+    has_special = any(c in "!@#$%^&*" for c in password)
+    long_enough = len(password) >= 10
+    has_lower = any(c.islower() for c in password)
+
+    if not long_enough:
+        return "Weak - needs at least 10 characters"
+    if not has_upper:
+        return "Weak - needs an uppercase letter"
+    if not has_digit:
+        return "Weak - needs a number"
+    if not has_lower:
+        return "Weak - needs a lowercase letter"
+    if not has_special:
+        return "Weak - needs a special character (!@#$%^&*)"
+    return "Strong"
+
+
 
 
 # Test passwords (do not change these lines)
@@ -210,14 +279,10 @@ test_passwords = [
     "MyStr0ng!PW",
 ]
 
-for pw in test_passwords:
-    result = is_strong_password(pw)
-    status = "STRONG ✅" if result["strong"] else "WEAK ❌"
-    print(f"  '{pw}' -> {status}")
-    if result["feedback"]:
-        for tip in result["feedback"]:
-            print(f"      - {tip}")
-
+print("=== Password Strength Checker ===")
+for p in test_passwords:
+    print(f"  '{p}' -> {is_strong_password(p)}")
+    pass
 
 # ════════════════════════════════════════════════════════════
 # SECTION 5 — File System & Log Analysis            [40 pts]
@@ -239,7 +304,16 @@ print("\n--- Section 5: File System & Log Analysis ---")
 #   Date: April 2026
 
 # YOUR CODE HERE
+cwd = os.getcwd()
+print(f"  Current directory: {cwd}")
+print("  Contents:")
 
+try:
+    for item in os.listdir("."):
+        kind = "FILE  " if os.path.isfile(item) else "FOLDER"
+        print(f"    [{kind}] {item}")
+except Exception as e:
+    print(f"  Error reading directory: {e}")
 
 # ── 5B. Log File Analysis [20 pts] ───────────────────────
 # A security log is provided below as a list of strings.
@@ -261,7 +335,19 @@ security_log = [
 ]
 
 # YOUR CODE HERE
-
+print("\n--- Log File Analyzer ---")
+print("Suspicious entries found:")
+Fcount = 0
+Scount = 0
+for entry in security_log:
+    if "FAILED" in entry or "ERROR" in entry:
+        print(f"  ⚠️  {entry}")
+        Fcount += 1
+    elif "SUCCESS" in entry:
+        print(f"  {entry}")
+        Scount += 1
+print(f"Total successful logins: {Scount}")
+print(f"Total failed attempts: {Fcount}")
 
 # ════════════════════════════════════════════════════════════
 print("\n" + "=" * 60)
